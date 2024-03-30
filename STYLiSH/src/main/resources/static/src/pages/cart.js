@@ -7,8 +7,8 @@ function Cart(props) {
 
     React.useEffect(() => {
         TPDirect.setupSDK(
-            146424,
-            ${app_key},
+            146363,
+            'app_ykeEQlC1ZJu816y5oKnFd5ykbugsA9FRUqicsutilAFKvzx3YFlF4yVhrgSD',
             'sandbox'
         );
         TPDirect.card.setup({
