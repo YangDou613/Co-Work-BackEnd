@@ -98,6 +98,11 @@ public class UserServiceImpl implements UserService {
             throw new UserPasswordMismatchException("Wrong Password");
         }
 
+        String newToken = jwtTokenUtil.generateToken(email, List.of(user.getRole().getName()));
+        user.setAccessToken(newToken);
+        user.setAccessExpired(jwtTokenUtil.getExpirationDateFromToken(newToken).getTime());
+        userRepository.save(user);
+
         return SignInDto.from(user);
     }
 

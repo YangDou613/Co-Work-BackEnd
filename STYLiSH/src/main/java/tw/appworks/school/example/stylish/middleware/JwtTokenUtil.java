@@ -36,7 +36,7 @@ public class JwtTokenUtil {
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plusSeconds(jwtExpireTimeAsSec))) // JWT
                 // 過期時間
-                .signWith(Keys.hmacShaKeyFor(jwtSignKey.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS512)
+                .signWith(Keys.hmacShaKeyFor(jwtSignKey.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
                 .compact();
     }
 
