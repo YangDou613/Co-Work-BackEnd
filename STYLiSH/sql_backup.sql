@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.2.0, for macos13.5 (arm64)
+-- MySQL dump 10.13  Distrib 8.3.0, for macos13.6 (arm64)
 --
--- Host: localhost    Database: stylish_db
+-- Host: localhost    Database: stylish_review
 -- ------------------------------------------------------
--- Server version	8.2.0
+-- Server version	8.3.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -137,7 +137,7 @@ CREATE TABLE `order_table` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `order_table_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5001 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5024 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,6 +146,7 @@ CREATE TABLE `order_table` (
 
 LOCK TABLES `order_table` WRITE;
 /*!40000 ALTER TABLE `order_table` DISABLE KEYS */;
+INSERT INTO `order_table` VALUES (5003,'230600399455',1711730439940,-1,'{\"list\": [{\"id\": \"201902191245\", \"qty\": 1, \"name\": \"小扇紋質感上衣\", \"size\": \"M\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 999}]}',10279,1029),(5004,'230623640266',1711732764020,-1,'{\"list\": [{\"id\": \"201807242234\", \"qty\": 1, \"name\": \"柔軟氣質羊毛圍巾\", \"size\": \"F\", \"color\": {\"code\": \"FFFFFF\", \"name\": \"白色\"}, \"price\": 1799}]}',10279,1829),(5005,'23040886834',1711760888659,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5006,'23042462666',1711761009952,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5007,'23043516266',1711761150738,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5008,'23047007905',1711761492474,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5009,'23047760039',1711761574465,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5010,'23050941620',1711761889822,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5011,'23053628743',1711762161655,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5012,'23054316943',1711762224877,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5013,'23054316945',1711762224269,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5014,'23058096279',1711762608577,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5015,'23066335432',1711763432245,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"CCCCCC\", \"name\": \"淺灰\"}, \"price\": 2399}]}',10279,2429),(5016,'230127844485',1711769584441,-1,'{\"list\": [{\"id\": \"201807242234\", \"qty\": 1, \"name\": \"柔軟氣質羊毛圍巾\", \"size\": \"F\", \"color\": {\"code\": \"DDF0FF\", \"name\": \"淺藍\"}, \"price\": 1799}]}',10279,1829),(5017,'230129797895',1711769779784,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"FFFFFF\", \"name\": \"白色\"}, \"price\": 2399}]}',10279,2429),(5018,'230130954968',1711769888459,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"FFFFFF\", \"name\": \"白色\"}, \"price\": 2399}]}',10279,2429),(5019,'230135135893',1711770312644,-1,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"FFFFFF\", \"name\": \"白色\"}, \"price\": 2399}]}',10279,2429),(5020,'230135912993',1711770391281,-1,'{\"list\": [{\"id\": \"201807242234\", \"qty\": 1, \"name\": \"柔軟氣質羊毛圍巾\", \"size\": \"F\", \"color\": {\"code\": \"FFFFFF\", \"name\": \"白色\"}, \"price\": 1799}]}',10279,1829),(5021,'230136818846',1711770481880,0,'{\"list\": [{\"id\": \"201807242216\", \"qty\": 1, \"name\": \"時尚輕鬆休閒西裝\", \"size\": \"L\", \"color\": {\"code\": \"FFFFFF\", \"name\": \"白色\"}, \"price\": 2399}]}',10279,2429),(5022,'230141093181',1711770909307,0,'{\"list\": [{\"id\": \"201807242222\", \"qty\": 1, \"name\": \"經典商務西裝\", \"size\": \"XL\", \"color\": {\"code\": \"334455\", \"name\": \"深藍\"}, \"price\": 3999}]}',10279,4029),(5023,'230144445196',1711771244510,0,'{\"list\": [{\"id\": \"201807242222\", \"qty\": 1, \"name\": \"經典商務西裝\", \"size\": \"XL\", \"color\": {\"code\": \"334455\", \"name\": \"深藍\"}, \"price\": 3999}]}',10279,4029);
 /*!40000 ALTER TABLE `order_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,7 +164,7 @@ CREATE TABLE `payment` (
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`),
   CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order_table` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,6 +173,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (1,5021,'{\"msg\": \"Success\", \"status\": 0, \"order_number\": \"230136818846\", \"rec_trade_id\": \"D20240330f6U6BB\"}'),(2,5022,'{\"msg\": \"Success\", \"status\": 0, \"order_number\": \"230141093181\", \"rec_trade_id\": \"D20240330xiZgKs\"}'),(3,5023,'{\"msg\": \"Success\", \"status\": 0, \"order_number\": \"230144445196\", \"rec_trade_id\": \"D20240330hGf1ZA\"}');
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,7 +250,7 @@ CREATE TABLE `role` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -257,6 +259,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (15,'user');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,7 +287,7 @@ CREATE TABLE `user` (
   KEY `access_token` (`access_token`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10273 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10280 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,6 +296,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (10278,NULL,'native','kash@test.com','$2a$10$yaQnjlwrFReoGFmccMU7reKrDIJku.YQBGGbFFuo0mWWR58zOi4lC','test',NULL,'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYXNoQHRlc3QuY29tIiwiaWF0IjoxNzExNzE4MjYwLCJleHAiOjE3MTE3MjE4NjB9.R9ABC-PYobHAwwGaJQjEoNvNrX_UhAAjIAHRENMETMg',1711721860000,'2024-03-29 13:17:26'),(10279,15,'native','test@gmail.com','$2a$10$fTXKdJkv.TlYHSwZ77oocuWFYIjKrQ/5sZ/ElXci8hRqHYCd9Mfo.','test',NULL,'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInVzZXJSb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTcxMTc2OTU0NiwiZXhwIjoxNzExNzczMTQ2fQ.6BVA3gWRXVGYxHax_e54GE18jTpst3mT6bXtjbqSbJM',1711773146000,'2024-03-29 13:28:55');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -370,4 +374,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-02-16 13:53:21
+-- Dump completed on 2024-03-30 14:07:26
