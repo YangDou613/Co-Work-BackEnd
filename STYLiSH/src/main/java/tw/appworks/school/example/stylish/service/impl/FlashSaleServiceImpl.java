@@ -16,9 +16,11 @@ public class FlashSaleServiceImpl implements FlashSale {
     public FlashSaleServiceImpl(FlashSaleDao flashSaleDao) {
         this.flashSaleDao = flashSaleDao;
     }
+
     @Override
     public FlashSaleNoticeDto getNotice() {
-        return null;
+        Timestamp currentTimeStamp = new Timestamp(new Date().getTime());
+        return flashSaleDao.getFlashSaleNoticeAfterDate(currentTimeStamp);
     }
 
     @Override

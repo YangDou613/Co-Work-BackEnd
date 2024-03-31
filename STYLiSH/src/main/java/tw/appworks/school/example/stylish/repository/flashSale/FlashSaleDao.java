@@ -6,14 +6,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import tw.appworks.school.example.stylish.data.dto.ColorDto;
 import tw.appworks.school.example.stylish.data.dto.FlashSaleEventDto;
+import tw.appworks.school.example.stylish.data.dto.FlashSaleNoticeDto;
 import tw.appworks.school.example.stylish.data.dto.ProductDto;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Repository
 public class FlashSaleDao {
     private final JdbcTemplate jdbcTemplate;
+
     @Autowired
     public FlashSaleDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -91,4 +96,20 @@ public class FlashSaleDao {
         }
     }
 
+    public FlashSaleNoticeDto getFlashSaleNoticeAfterDate(Timestamp timestamp) {
+        String selectSql = "SELECT * FROM flashSale WHERE end_time > ? ORDER BY end_time LIMIT 1";
+        try {
+            return jdbcTemplate.queryForObject(selectSql, new Object[]{timestamp}, (rs, rowNum) -> {
+                FlashSaleNoticeDto flashSale = new FlashSaleNoticeDto();
+                flashSale.setId(rs.getLong("id"));
+                flashSale.setStartTime(rs.getTimestamp("start_time"));
+                flashSale.setEndTime(rs.getTimestamp("end_time"));
+                // Map other fields of FlashSaleNoticeDto as needed
+                return flashSale;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            // Variant not found
+            return null;
+        }
+    }
 }
