@@ -19,10 +19,15 @@ public class CouponRepository {
 
 	public Coupon getRandomCoupon(int randomId) {
 
-		System.out.println("kkkk");
-
 		String getCouponSql = "SELECT * FROM coupon WHERE coupon_id = ?";
 		return jdbcTemplate.queryForObject(getCouponSql, new BeanPropertyRowMapper<>(Coupon.class), randomId);
+
+	}
+
+	public Integer getCouponCount() {
+
+		String getCouponCountSql = "SELECT COUNT(*) FROM coupon";
+		return jdbcTemplate.queryForObject(getCouponCountSql, Integer.class);
 
 	}
 
@@ -36,7 +41,7 @@ public class CouponRepository {
 	public void insertToUserCouponsTable(Integer userId, Coupon coupon) {
 
 		LocalDateTime currentTime = LocalDateTime.now();
-		LocalDateTime expire_time = currentTime.plusDays(coupon.getExpire_period());
+		LocalDateTime expire_time = currentTime.plusDays(coupon.getExpire_days());
 
 		String insertSql = "INSERT INTO user_coupons (user_id, coupon_id, obtain_time, expire_time, coupon_status) VALUES (?, ?, ?, ?, ?)";
 		jdbcTemplate.update(insertSql, userId, coupon.getCoupon_id(), currentTime, expire_time, "0");
@@ -66,7 +71,7 @@ public class CouponRepository {
 
 	public List<Map<String, Object>> getCouponList(Integer userID) {
 
-		String getCouponListSql = "SELECT * FROM user_coupons LEFT JOIN coupon ON user_coupons.id = coupon.coupon_id WHERE user_id = ?";
+		String getCouponListSql = "SELECT * FROM user_coupons LEFT JOIN coupon ON user_coupons.coupon_id = coupon.coupon_id WHERE user_id = ?";
 		return jdbcTemplate.queryForList(getCouponListSql, userID);
 
 	}
