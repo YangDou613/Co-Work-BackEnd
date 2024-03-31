@@ -25,28 +25,20 @@ import java.util.stream.Stream;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    @Value("${stylish.domain}")
-    private String domain;
-
-    @Value("${stylish.port}")
-    private int port;
-
-    @Value("${stylish.scheme}")
-    private String scheme;
-
+    public static final Logger logger = LoggerFactory.getLogger(ProductService.class);
+    private final ProductsRepository productsRepository;
+    private final ProductImageRepository productImageRepository;
+    private final VariantRepository variantRepository;
+    private final ColorRepository colorRepository;
+    //    @Value("${stylish.domain}")
+//    private String domain;
+//    @Value("${stylish.port}")
+//    private int port;
+//    @Value("${stylish.scheme}")
+//    private String scheme;
     @Value("${product.paging.size}")
     private int pagingSize;
-
-    private final ProductsRepository productsRepository;
-
-    private final ProductImageRepository productImageRepository;
-
-    private final VariantRepository variantRepository;
-
-    private final ColorRepository colorRepository;
-
-    public static final Logger logger = LoggerFactory.getLogger(ProductService.class);
-
+    @Value("${image.prefix}")
     private String prefix;
 
     public ProductServiceImpl(ProductsRepository productsRepository, ProductImageRepository productImageRepository,
@@ -57,14 +49,14 @@ public class ProductServiceImpl implements ProductService {
         this.colorRepository = colorRepository;
     }
 
-    private void createPrefix() {
-        StringBuilder builder = new StringBuilder(scheme + "://" + domain);
-        if (port != 80 && port != 443) {
-            builder.append(":").append(port);
-        }
-        builder.append("/");
-        this.prefix = builder.toString();
-    }
+//    private void createPrefix() {
+//        StringBuilder builder = new StringBuilder(scheme + "://" + domain);
+//        if (port != 80 && port != 443) {
+//            builder.append(":").append(port);
+//        }
+//        builder.append("/");
+//        this.prefix = prefix;
+//    }
 
     @Override
     public List<ProductDto> getProducts(@Nonnull String category, int pagingSize, int paging) {
@@ -151,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void appendPrefix(ProductDto dto) {
-        if (prefix == null) createPrefix();
+//        if (prefix == null) createPrefix();
         dto.setMainImage(prefix + dto.getMainImage());
         dto.setImages(dto.getImages().stream().map(image -> prefix + image).collect(Collectors.toSet()));
     }
