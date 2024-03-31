@@ -1,6 +1,7 @@
 package tw.appworks.school.example.stylish.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tw.appworks.school.example.stylish.data.dto.ZodiacDto;
 import tw.appworks.school.example.stylish.model.product.Product;
@@ -16,51 +17,59 @@ import java.util.List;
 @Service
 public class ZodiacService {
 
-	@Autowired
-	ZodiacRepository zodiacRepository;
+    @Autowired
+    ZodiacRepository zodiacRepository;
+    @Value("${image.prefix}")
+    private String prefix;
 
-	public List<ZodiacDto> getZodiacDetails() {
+    public List<ZodiacDto> getZodiacDetails() {
 
-		List<ZodiacDto> zodiacDtoList = new ArrayList<>();
+        List<ZodiacDto> zodiacDtoList = new ArrayList<>();
 
-		// Get id from zodiac crawler
-		LocalDate currentDate = LocalDate.now();
-		List<BigInteger> idListFromZodiacCrawler = getId(currentDate);
+        // Get id from zodiac crawler
+        LocalDate currentDate = LocalDate.now();
+        List<BigInteger> idListFromZodiacCrawler = getId(currentDate);
 
-		for (BigInteger id : idListFromZodiacCrawler) {
+        for (BigInteger id : idListFromZodiacCrawler) {
 
-			ZodiacDto zodiacDto = new ZodiacDto();
+            ZodiacDto zodiacDto = new ZodiacDto();
 
-			// Get zodiac
-			Zodiac zodiac = zodiacRepository.getZodiacFromZodiacCrawler(id);
+            // Get zodiac
+            Zodiac zodiac = zodiacRepository.getZodiacFromZodiacCrawler(id);
 
-			// Get zodiac element
-			ZodiacEle zodiacEle = zodiacRepository.getZodiacEle(zodiac.getZodiac_id());
+            // Get zodiac element
+            ZodiacEle zodiacEle = zodiacRepository.getZodiacEle(zodiac.getZodiac_id());
 
-			// Get productId from result
-			BigInteger productId = zodiacRepository.getResult(id);
+            // Get productId from result
+            BigInteger productId = zodiacRepository.getResult(id);
 
-			// Get product
-			Product product = zodiacRepository.getProduct(productId);
+            // Get product
+            Product product = zodiacRepository.getProduct(productId);
 
-			// Summary
-			zodiacDto.setZodiacId(zodiac.getZodiac_id());
-			zodiacDto.setZodiacElement(zodiacEle.getZodiac_element());
-			zodiacDto.setZodiacZh(zodiacEle.getZodiac_zh());
-			zodiacDto.setColorName(zodiac.getColor_name());
-			zodiacDto.setColorHex(zodiac.getZodiac_hex());
-			zodiacDto.setDescription(zodiac.getDescription());
-			zodiacDto.setProduct(product);
+            // Summary
+            zodiacDto.setZodiacId(zodiac.getZodiac_id());
+            zodiacDto.setZodiacElement(zodiacEle.getZodiac_element());
+            zodiacDto.setZodiacZh(zodiacEle.getZodiac_zh());
+            zodiacDto.setColorName(zodiac.getColor_name());
+            zodiacDto.setColorHex(zodiac.getZodiac_hex());
+            zodiacDto.setDescription(zodiac.getDescription());
 
-			zodiacDtoList.add(zodiacDto);
-		}
+            appendPrefix(product);
+            zodiacDto.setProduct(product);
 
-		return zodiacDtoList;
+            zodiacDtoList.add(zodiacDto);
+        }
 
-	}
+        return zodiacDtoList;
 
-	private List<BigInteger> getId(LocalDate currentDate) {
-		return zodiacRepository.getIdFromZodiacCrawler(currentDate);
-	}
+    }
 
+    private List<BigInteger> getId(LocalDate currentDate) {
+        return zodiacRepository.getIdFromZodiacCrawler(currentDate);
+    }
+
+    private void appendPrefix(Product dto) {
+        dto.setMainImage(prefix + dto.getMainImage());
+//        dto.setImages(dto.getImages().stream().map(image -> prefix + image).collect(Collectors.toSet()));
+    }
 }
