@@ -9,6 +9,7 @@ import tw.appworks.school.example.stylish.model.zodiac.ZodiacEle;
 import tw.appworks.school.example.stylish.repository.zodiac.ZodiacRepository;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,8 @@ public class ZodiacService {
 			ZodiacDto zodiacDto = new ZodiacDto();
 
 			// Get zodiac
-			Zodiac zodiac = zodiacRepository.getZodiacFromZodiacCrawler(id);
+			LocalDate currentDate = LocalDate.now();
+			Zodiac zodiac = zodiacRepository.getZodiacFromZodiacCrawler(currentDate, id);
 
 			// Get zodiac element
 			ZodiacEle zodiacEle = zodiacRepository.getZodiacEle(id);

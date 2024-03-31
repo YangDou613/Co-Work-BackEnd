@@ -55,9 +55,11 @@ public class CouponService {
 
 	public Coupon RandomCoupon() {
 
+		int couponCount = couponRepository.getCouponCount();
+
 		// Random id
 		int randomId = 0;
-		randomId = (int)(Math.random() * 5) + 1;
+		randomId = (int)(Math.random() * couponCount) + 1;
 
 		return couponRepository.getRandomCoupon(randomId);
 	}

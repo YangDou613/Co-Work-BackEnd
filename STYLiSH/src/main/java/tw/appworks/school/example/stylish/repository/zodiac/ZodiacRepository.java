@@ -9,6 +9,8 @@ import tw.appworks.school.example.stylish.model.zodiac.Zodiac;
 import tw.appworks.school.example.stylish.model.zodiac.ZodiacEle;
 
 import java.math.BigInteger;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -20,16 +22,17 @@ public class ZodiacRepository {
 	// Get zodiac id
 	public List<BigInteger> getIdFromZodiacCrawler() {
 
-		String getIdSql = "SELECT id FROM zodiac_crawler";
+		String getIdSql = "SELECT zodiac_id FROM zodiac_ele";
 		return jdbcTemplate.queryForList(getIdSql, BigInteger.class);
 
 	}
 
 	// Get zodiac
-	public Zodiac getZodiacFromZodiacCrawler(BigInteger id) {
+	public Zodiac getZodiacFromZodiacCrawler(LocalDate currentDate, BigInteger id) {
 
-		String getZodiacSql = "SELECT * FROM zodiac_crawler WHERE id = ?";
-		return jdbcTemplate.queryForObject(getZodiacSql, new BeanPropertyRowMapper<>(Zodiac.class), id);
+		Date date = Date.valueOf(currentDate);
+		String getZodiacSql = "SELECT * FROM zodiac_crawler WHERE date = ? AND zodiac_id = ?";
+		return jdbcTemplate.queryForObject(getZodiacSql, new BeanPropertyRowMapper<>(Zodiac.class), date, id);
 
 	}
 
