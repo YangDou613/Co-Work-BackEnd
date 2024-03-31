@@ -6,7 +6,7 @@ import java.math.BigInteger;
 
 @Data
 public class ZodiacDto {
-	private BigInteger zodiacCrawlerId;
+	private BigInteger zodiacId;
 	private String zodiacElement;
 	private String zodiacZh;
 	private String colorName;

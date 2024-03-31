@@ -19,32 +19,32 @@ public class ZodiacRepository {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	// Get zodiac id
-	public List<BigInteger> getIdFromZodiacCrawler() {
+	// Get id from zodiac crawler
+	public List<BigInteger> getIdFromZodiacCrawler(LocalDate currentDate) {
 
-		String getIdSql = "SELECT zodiac_id FROM zodiac_ele";
-		return jdbcTemplate.queryForList(getIdSql, BigInteger.class);
+		Date date = Date.valueOf(currentDate);
+		String getIdSql = "SELECT id FROM zodiac_crawler WHERE date = ?";
+		return jdbcTemplate.queryForList(getIdSql, BigInteger.class, date);
 
 	}
 
 	// Get zodiac
-	public Zodiac getZodiacFromZodiacCrawler(LocalDate currentDate, BigInteger id) {
+	public Zodiac getZodiacFromZodiacCrawler(BigInteger id) {
 
-		Date date = Date.valueOf(currentDate);
-		String getZodiacSql = "SELECT * FROM zodiac_crawler WHERE date = ? AND zodiac_id = ?";
-		return jdbcTemplate.queryForObject(getZodiacSql, new BeanPropertyRowMapper<>(Zodiac.class), date, id);
+		String getZodiacSql = "SELECT * FROM zodiac_crawler WHERE id = ?";
+		return jdbcTemplate.queryForObject(getZodiacSql, new BeanPropertyRowMapper<>(Zodiac.class), id);
 
 	}
 
 	// Get zodiac element
-	public ZodiacEle getZodiacEle(BigInteger id) {
+	public ZodiacEle getZodiacEle(BigInteger zodiacId) {
 
 		String getZodiacEleSql = "SELECT * FROM zodiac_ele WHERE zodiac_id = ?";
-		return jdbcTemplate.queryForObject(getZodiacEleSql, new BeanPropertyRowMapper<>(ZodiacEle.class), id);
+		return jdbcTemplate.queryForObject(getZodiacEleSql, new BeanPropertyRowMapper<>(ZodiacEle.class), zodiacId);
 
 	}
 
-	// Get result
+	// Get productId from result
 	public BigInteger getResult(BigInteger id) {
 
 		String getResultSql = "SELECT product_id FROM sim_result WHERE zodiac_crawler_id = ?";
