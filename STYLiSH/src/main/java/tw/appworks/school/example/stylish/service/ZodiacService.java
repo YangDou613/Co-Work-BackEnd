@@ -23,19 +23,19 @@ public class ZodiacService {
 
 		List<ZodiacDto> zodiacDtoList = new ArrayList<>();
 
-		// Get zodiac id
-		List<BigInteger> idList = getId();
+		// Get id from zodiac crawler
+		LocalDate currentDate = LocalDate.now();
+		List<BigInteger> idListFromZodiacCrawler = getId(currentDate);
 
-		for (BigInteger id : idList) {
+		for (BigInteger id : idListFromZodiacCrawler) {
 
 			ZodiacDto zodiacDto = new ZodiacDto();
 
 			// Get zodiac
-			LocalDate currentDate = LocalDate.now();
-			Zodiac zodiac = zodiacRepository.getZodiacFromZodiacCrawler(currentDate, id);
+			Zodiac zodiac = zodiacRepository.getZodiacFromZodiacCrawler(id);
 
 			// Get zodiac element
-			ZodiacEle zodiacEle = zodiacRepository.getZodiacEle(id);
+			ZodiacEle zodiacEle = zodiacRepository.getZodiacEle(zodiac.getZodiac_id());
 
 			// Get productId from result
 			BigInteger productId = zodiacRepository.getResult(id);
@@ -44,7 +44,7 @@ public class ZodiacService {
 			Product product = zodiacRepository.getProduct(productId);
 
 			// Summary
-			zodiacDto.setZodiacCrawlerId(id);
+			zodiacDto.setZodiacId(zodiac.getZodiac_id());
 			zodiacDto.setZodiacElement(zodiacEle.getZodiac_element());
 			zodiacDto.setZodiacZh(zodiacEle.getZodiac_zh());
 			zodiacDto.setColorName(zodiac.getColor_name());
@@ -59,7 +59,8 @@ public class ZodiacService {
 
 	}
 
-	private List<BigInteger> getId() {
-		return zodiacRepository.getIdFromZodiacCrawler();
+	private List<BigInteger> getId(LocalDate currentDate) {
+		return zodiacRepository.getIdFromZodiacCrawler(currentDate);
 	}
+
 }
