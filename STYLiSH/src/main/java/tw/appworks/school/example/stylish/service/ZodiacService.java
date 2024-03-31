@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tw.appworks.school.example.stylish.data.dto.ZodiacDto;
 import tw.appworks.school.example.stylish.model.product.Product;
+import tw.appworks.school.example.stylish.model.zodiac.ProductForZodiac;
 import tw.appworks.school.example.stylish.model.zodiac.Zodiac;
 import tw.appworks.school.example.stylish.model.zodiac.ZodiacEle;
 import tw.appworks.school.example.stylish.repository.zodiac.ZodiacRepository;
@@ -41,7 +42,7 @@ public class ZodiacService {
 			BigInteger productId = zodiacRepository.getResult(id);
 
 			// Get product
-			Product product = zodiacRepository.getProduct(productId);
+			ProductForZodiac product = zodiacRepository.getProduct(productId);
 
 			// Summary
 			zodiacDto.setZodiacId(zodiac.getZodiac_id());
