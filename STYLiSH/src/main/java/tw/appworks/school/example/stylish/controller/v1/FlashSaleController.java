@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import tw.appworks.school.example.stylish.data.dto.FlashSaleEventDto;
+import tw.appworks.school.example.stylish.data.dto.FlashSaleNoticeDto;
 import tw.appworks.school.example.stylish.service.impl.FlashSaleServiceImpl;
 
 @RestController
@@ -14,6 +15,7 @@ import tw.appworks.school.example.stylish.service.impl.FlashSaleServiceImpl;
 public class FlashSaleController {
 
     private final FlashSaleServiceImpl flashSaleService;
+
     public FlashSaleController(FlashSaleServiceImpl flashSaleService) {
         this.flashSaleService = flashSaleService;
     }
@@ -21,7 +23,8 @@ public class FlashSaleController {
     @GetMapping("/notice")
     @ResponseBody
     public ResponseEntity<?> getNotice() {
-        return ResponseEntity.status(HttpStatus.OK).body("TODO notice");
+        FlashSaleNoticeDto noticeDto = flashSaleService.getNotice();
+        return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
     }
 
     @GetMapping("/event")
