@@ -1,5 +1,6 @@
 package tw.appworks.school.example.stylish.controller.v1;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,11 +13,11 @@ import tw.appworks.school.example.stylish.model.coupon.Coupon;
 import tw.appworks.school.example.stylish.service.CouponService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("api/1.0/coupon")
+@Slf4j
 public class CouponController {
 
 	@Autowired
@@ -36,22 +37,34 @@ public class CouponController {
 
 		String accessToken = extractAccessToken(authorization);
 
-		// Get random coupon
-		Coupon coupon = couponService.RandomCoupon();
-		System.out.println("hiii");
-
-		// Get game chance
-		Integer chance = couponService.Chance(accessToken);
-		System.out.println("apple");
-
-		response.put("coupon", coupon);
-		response.put("game_chance", chance);
-
-		System.out.println(response);
+		response = couponService.getRandomCouponAndChance(accessToken);
 
 		return ResponseEntity.ok()
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(response);
+	}
+
+	@GetMapping("startGame")
+	public ResponseEntity<?> startGame(
+			@RequestHeader("Authorization") String authorization) {
+
+		// new Map 設定 response
+		Map<String, Object> response = new HashMap<>();
+
+		String accessToken = extractAccessToken(authorization);
+		try {
+			Integer chances = couponService.deductOneChance(accessToken);
+			log.info("Deduct one chance.");
+			response.put("chances", chances);
+			return ResponseEntity.ok()
+					.contentType(MediaType.APPLICATION_JSON)
+					.body(response);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			response.put("Error", e.getMessage());
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+		}
+
 	}
 
 	@GetMapping("profilePage")
@@ -68,14 +81,7 @@ public class CouponController {
 
 		String accessToken = extractAccessToken(authorization);
 
-		// Get user id
-		Integer userId = couponService.userId(accessToken);
-
-		// Get coupon list
-		List<Map<String, Object>> couponList = couponService.couponList(userId);
-
-		response.put("user_id", userId);
-		response.put("coupons", couponList);
+		response = couponService.getCouponList(accessToken);
 
 		return ResponseEntity.ok()
 				.contentType(MediaType.APPLICATION_JSON)

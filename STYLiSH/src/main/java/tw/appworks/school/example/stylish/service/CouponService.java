@@ -6,6 +6,7 @@ import tw.appworks.school.example.stylish.model.coupon.Coupon;
 import tw.appworks.school.example.stylish.repository.coupon.CouponRepository;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,30 +16,56 @@ public class CouponService {
 	@Autowired
 	private CouponRepository couponRepository;
 
+	public Map<String, Object> getRandomCouponAndChance(String accessToken) {
+
+		Integer userId = userId(accessToken); // Get user id
+
+		// Get
+		Map<String, Object> response = new HashMap<>();
+		Coupon coupon = RandomCoupon(); // Random coupon
+		Integer chance = Chance(accessToken); // Game chance
+		response.put("coupon", coupon);
+		response.put("game_chance", chance);
+
+		// Insert to user_coupons table
+		addToDatabase(userId, coupon);
+
+		return response;
+	}
+
+	public void addToDatabase(Integer userId, Coupon coupon) {
+		couponRepository.insertToUserCouponsTable(userId, coupon);
+	}
+
+	public Integer deductOneChance(String accessToken) {
+
+		Integer userId = userId(accessToken);
+		return couponRepository.deductChanceFromDatabase(userId);
+	}
+
+	public Map<String, Object> getCouponList(String accessToken) {
+
+		Map<String, Object> response = new HashMap<>();
+		Integer userId = userId(accessToken); // User id
+		List<Map<String, Object>> couponList = couponList(userId); // Coupon list
+		response.put("user_id", userId);
+		response.put("coupons", couponList);
+		return response;
+	}
+
 	public Coupon RandomCoupon() {
 
 		// Random id
 		int randomId = 0;
 		randomId = (int)(Math.random() * 5) + 1;
 
-		System.out.println(randomId);
-
-		System.out.println("oooooooooo");
-
-		Coupon response = couponRepository.getRandomCoupon(randomId);
-
-		System.out.println(response);
-
-		return response;
-
-//		return couponRepository.getRandomCoupon(randomId);
+		return couponRepository.getRandomCoupon(randomId);
 	}
 
 	public Integer Chance(String accessToken) {
 
 		// Get user id
 		Integer userId = userId(accessToken);
-		System.out.println(userId);
 
 		// Get chance
 		return couponRepository.getChance(userId);

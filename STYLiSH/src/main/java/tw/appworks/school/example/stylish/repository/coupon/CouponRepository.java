@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import tw.appworks.school.example.stylish.model.coupon.Coupon;
 import tw.appworks.school.example.stylish.model.zodiac.Zodiac;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +33,31 @@ public class CouponRepository {
 
 	}
 
-	public Integer getUserId(String accessToken) {
+	public void insertToUserCouponsTable(Integer userId, Coupon coupon) {
 
-		System.out.println("hereeeeeeeeeee");
+		LocalDateTime currentTime = LocalDateTime.now();
+		LocalDateTime expire_time = currentTime.plusDays(coupon.getExpire_period());
+
+		String insertSql = "INSERT INTO user_coupons (user_id, coupon_id, obtain_time, expire_time, coupon_status) VALUES (?, ?, ?, ?, ?)";
+		jdbcTemplate.update(insertSql, userId, coupon.getCoupon_id(), currentTime, expire_time, "0");
+	}
+
+	public Integer deductChanceFromDatabase(Integer userId) {
+
+		String getChanceSql = "SELECT chance FROM user_game_chance WHERE user_id = ?";
+		Integer chances = jdbcTemplate.queryForObject(getChanceSql, Integer.class, userId);
+
+		if (chances != null && chances > 0) {
+			chances--;
+
+			String updateSql = "UPDATE user_game_chance SET chance = ? WHERE user_id = ?";
+			jdbcTemplate.update(updateSql, chances, userId);
+		}
+
+		return chances;
+	}
+
+	public Integer getUserId(String accessToken) {
 
 		String getUserIdSql = "SELECT id FROM user WHERE access_token = ?";
 		return jdbcTemplate.queryForObject(getUserIdSql, Integer.class, accessToken);
