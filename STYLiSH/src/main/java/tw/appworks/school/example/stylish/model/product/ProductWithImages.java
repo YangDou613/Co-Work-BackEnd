@@ -10,23 +10,22 @@ import tw.appworks.school.example.stylish.data.form.ProductForm;
         indexes = {@Index(name = "category", columnList = "category"), @Index(name = "title", columnList = "title"),})
 @Data
 @NoArgsConstructor
-public class Product {
+public class ProductWithImages {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "bigint unsigned", nullable = false)
     private Long id;
 
-    @Column(name = "category", length = 127, nullable = false)
+
     private String category;
 
-    @Column(name = "title", nullable = false)
+
     private String title;
 
-    @Column(name = "description", nullable = false)
+
     private String description;
 
-    @Column(name = "price", columnDefinition = "int unsigned", nullable = false)
+
     private long price;
 
     @Column(name = "wash", length = 127, nullable = false)
@@ -70,3 +69,4 @@ public class Product {
         return p;
     }
 }
+
