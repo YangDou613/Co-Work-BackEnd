@@ -47,6 +47,19 @@ public class CouponRepository {
 		jdbcTemplate.update(insertSql, userId, coupon.getCoupon_id(), currentTime, expire_time, "0");
 	}
 
+	public void insertToUserGameChanceTable(Integer userId) {
+
+		String insertSql = "INSERT INTO user_game_chance (user_id, chance) VALUES (?, ?)";
+		jdbcTemplate.update(insertSql, userId, 3);
+	}
+
+	public boolean checkUserId(Integer userId) {
+
+		String sql = "SELECT COUNT(*) FROM user_game_chance WHERE user_id = ?";
+		Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userId);
+		return count != null && count > 0;
+	}
+
 	public Integer deductChanceFromDatabase(Integer userId) {
 
 		String getChanceSql = "SELECT chance FROM user_game_chance WHERE user_id = ?";

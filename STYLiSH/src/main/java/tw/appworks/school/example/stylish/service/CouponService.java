@@ -23,18 +23,24 @@ public class CouponService {
 		// Get
 		Map<String, Object> response = new HashMap<>();
 		Coupon coupon = RandomCoupon(); // Random coupon
+
+		// Insert to user_coupons table and user_game_chance table
+		addToDatabase(userId, coupon);
+
 		Integer chance = Chance(accessToken); // Game chance
 		response.put("coupon", coupon);
 		response.put("game_chance", chance);
-
-		// Insert to user_coupons table
-		addToDatabase(userId, coupon);
 
 		return response;
 	}
 
 	public void addToDatabase(Integer userId, Coupon coupon) {
 		couponRepository.insertToUserCouponsTable(userId, coupon);
+
+		boolean isUserIdInUserGameChanceTable = couponRepository.checkUserId(userId);
+		if (!isUserIdInUserGameChanceTable) {
+			couponRepository.insertToUserGameChanceTable(userId);
+		}
 	}
 
 	public Integer deductOneChance(String accessToken) {
