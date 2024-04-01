@@ -1,6 +1,7 @@
 package tw.appworks.school.example.stylish.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
@@ -60,13 +61,14 @@ public class OrderServiceImpl implements OrderService {
     @Nullable
     public Payment payByPrime(OrderForm orderForm, String token, UserService userService)
             throws JsonProcessingException, UserService.UserNotExistException, PaymentNotSuccessException {
-        Order order = createOrderAndSave(orderForm, token, userService);
-        TappayPrimeResponse response = postToTappay(order, orderForm);
 
-        if (response.getStatus() != 0) {
-            throw new PaymentNotSuccessException(response.getMsg());
-        }
-        return createPaymentAndSave(response, order);
+        Order order = createOrderAndSave(orderForm, token, userService);
+//        TappayPrimeResponse response = postToTappay(order, orderForm);
+
+//        if (response.getStatus() != 0) {
+//            throw new PaymentNotSuccessException(response.getMsg());
+//        }
+        return createPaymentAndSave(/*response, */order);
     }
 
     private Order createOrderAndSave(OrderForm orderForm, String token, UserService userService)
@@ -75,29 +77,33 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-    private TappayPrimeResponse postToTappay(Order order, OrderForm orderForm) throws JsonProcessingException {
-        TappayRequestForm from = TappayRequestForm.from(TAPPAY_PARTNER_KEY, TAPPAY_MERCHANT_ID, orderForm,
-                order.getNumber());
-        logger.debug("tap pay form: " + objectMapper.writeValueAsString(from));
-        return WebClient.create("https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime")
-                .post()
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("x-api-key", TAPPAY_PARTNER_KEY)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(from), TappayRequestForm.class)
-                .retrieve()
-                .bodyToMono(TappayPrimeResponse.class)
-                .block();
-    }
+//    private TappayPrimeResponse postToTappay(Order order, OrderForm orderForm) throws JsonProcessingException {
+//        TappayRequestForm from = TappayRequestForm.from(TAPPAY_PARTNER_KEY, TAPPAY_MERCHANT_ID, orderForm,
+//                order.getNumber());
+//        logger.debug("tap pay form: " + objectMapper.writeValueAsString(from));
+//        return WebClient.create("https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime")
+//                .post()
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header("x-api-key", TAPPAY_PARTNER_KEY)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .body(Mono.just(from), TappayRequestForm.class)
+//                .retrieve()
+//                .bodyToMono(TappayPrimeResponse.class)
+//                .block();
+//    }
 
-    private Payment createPaymentAndSave(TappayPrimeResponse tappayPrimeResponse, Order order) {
+    private Payment createPaymentAndSave(/*TappayPrimeResponse tappayPrimeResponse, */Order order) throws JsonProcessingException {
         Payment payment = new Payment();
         payment.setOrder(order);
-        try {
-            payment
-                    .setDetails(converter.convertToEntityAttribute(objectMapper.writeValueAsString(tappayPrimeResponse)));
-        } catch (JsonProcessingException ignore) {
-        }
+//        try {
+//            payment
+//                    .setDetails(converter.convertToEntityAttribute(objectMapper.writeValueAsString(tappayPrimeResponse)));
+//        } catch (JsonProcessingException ignore) {
+//        }
+        String jsonString = "{\"msg\": \"Success\", \"status\": 0, \"order_number\": \"230136818846\", \"rec_trade_id\": \"D20240330f6U6BB\"}";
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode details = mapper.readTree(jsonString);
+        payment.setDetails(details);
         payment = paymentRepository.save(payment);
         order.setStatus(PAYMENT_STATE_PAID);
         payment.setOrder(order);
@@ -109,9 +115,23 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setTime(Instant.now().toEpochMilli());
         order.setStatus(PAYMENT_STATE_UNPAID);
-        order.setTotal(Float.valueOf(orderForm.getOrder().getTotal()));
         order.setDetails(converter.convertToEntityAttribute(createOrderDetailJsonString(orderForm)));
         order.setUser(user);
+
+        // Subtotal
+        order.setSubtotal(orderForm.getOrder().getSubtotal());
+
+        // user Coupon ID
+        order.setUserCouponId(orderForm.getOrder().getUser_coupon_id());
+
+        // Use Coupon
+        order.setUseCoupon(orderForm.getOrder().getUse_coupon());
+
+        // Discount Amt
+        order.setDiscountAmt(orderForm.getOrder().getDiscount_amt());
+
+        // Total (After discount)
+        order.setTotal(orderForm.getOrder().getTotal());
 
         Date now = Date.from(Instant.now());
         Calendar c = Calendar.getInstance();
@@ -119,6 +139,7 @@ public class OrderServiceImpl implements OrderService {
         String number = "" + c.get(Calendar.MONTH) + c.get(Calendar.DATE)
                 + (c.getTimeInMillis() % (24 * 60 * 60 * 1000)) + (int) Math.floor(Math.random() * 10);
         order.setNumber(number);
+
         return order;
     }
 

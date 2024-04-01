@@ -29,6 +29,12 @@ public class OrderForm {
 
         private Integer freight;
 
+        private Integer user_coupon_id;
+
+        private Integer use_coupon;
+
+        private Integer discount_amt;
+
         private Integer total;
 
         private Recipient recipient;
