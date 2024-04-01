@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import tw.appworks.school.example.stylish.model.coupon.Coupon;
+import tw.appworks.school.example.stylish.model.order.Order;
+import tw.appworks.school.example.stylish.model.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +33,26 @@ public class CouponRepository {
 
         String getCouponCountSql = "SELECT COUNT(*) FROM coupon";
         return jdbcTemplate.queryForObject(getCouponCountSql, Integer.class);
+
+    }
+
+    public void changeCouponStatus(Order order) {
+
+        // Get user id
+        Long userId = order.getUser().getId();
+
+        // Get coupon id
+        Integer userCouponId = order.getUserCouponId();
+
+        // Check exist and status 0
+        String sql = "SELECT COUNT(*) FROM user_coupons WHERE id = ? AND user_id = ? AND coupon_status = '0'";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userCouponId, userId);
+
+        // Change coupon status
+        if (count != null && count > 0) {
+            String updateSql = "UPDATE user_coupons SET coupon_status = ? WHERE id = ? AND user_id = ?";
+            jdbcTemplate.update(updateSql, "1", userCouponId, userId);
+        }
 
     }
 
