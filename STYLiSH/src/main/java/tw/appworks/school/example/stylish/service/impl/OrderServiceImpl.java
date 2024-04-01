@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import tw.appworks.school.example.stylish.model.JsonNodeConverter;
 import tw.appworks.school.example.stylish.model.order.Order;
 import tw.appworks.school.example.stylish.model.order.Payment;
 import tw.appworks.school.example.stylish.model.user.User;
+import tw.appworks.school.example.stylish.repository.coupon.CouponRepository;
 import tw.appworks.school.example.stylish.repository.order.OrderRepository;
 import tw.appworks.school.example.stylish.repository.order.PaymentRepository;
 import tw.appworks.school.example.stylish.service.OrderService;
@@ -52,6 +54,9 @@ public class OrderServiceImpl implements OrderService {
 
     private final PaymentRepository paymentRepository;
 
+    @Autowired
+    private CouponRepository couponRepository;
+
     public OrderServiceImpl(OrderRepository orderRepository, PaymentRepository paymentRepository) {
         this.orderRepository = orderRepository;
         this.paymentRepository = paymentRepository;
@@ -74,6 +79,10 @@ public class OrderServiceImpl implements OrderService {
     private Order createOrderAndSave(OrderForm orderForm, String token, UserService userService)
             throws UserService.UserNotExistException, JsonProcessingException {
         Order order = createOrder(orderForm, userService.getUserByToken(token));
+
+        // Change coupon status
+        couponRepository.changeCouponStatus(order);
+
         return orderRepository.save(order);
     }
 
