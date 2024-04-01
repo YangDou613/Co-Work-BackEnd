@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import tw.appworks.school.example.stylish.data.dto.ColorDto;
-import tw.appworks.school.example.stylish.data.dto.FlashSaleEventDto;
-import tw.appworks.school.example.stylish.data.dto.FlashSaleNoticeDto;
-import tw.appworks.school.example.stylish.data.dto.ProductDto;
+import tw.appworks.school.example.stylish.data.dto.*;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -30,7 +27,7 @@ public class FlashSaleDao {
                 ") fs " +
                 "LEFT JOIN product p ON fs.product_id = p.id " +
                 "LEFT JOIN product_images pi ON p.id = pi.product_id " +
-                "LEFT JOIN color c ON fs.color_id = c.id";
+                "LEFT JOIN color c ON fs.color_id = c.id ";
 
         try {
             Map<Long, FlashSaleEventDto> productMap = new HashMap<>();
@@ -44,6 +41,16 @@ public class FlashSaleDao {
                     Set<String> images = new HashSet<>();
                     images.add(rs.getString("pi.image"));
                     flashSale.getProduct().setImages(images);
+
+                    // variants
+                    Set<VariantsDto> variants = new HashSet<>();
+                    VariantsDto variantsDto = new VariantsDto();
+                    variantsDto.setColorCode(rs.getString("c.code"));
+                    variantsDto.setSize(rs.getString("fs.size"));
+                    variantsDto.setStock(rs.getInt("fs.stock"));
+                    variants.add(variantsDto);
+                    flashSale.getProduct().setVariants(variants);
+
                 } else {
                     // Create a new FlashSaleEventDto object
                     FlashSaleEventDto flashSale = new FlashSaleEventDto();
@@ -79,6 +86,15 @@ public class FlashSaleDao {
                     Set<String> sizes = new HashSet<>();
                     sizes.add(rs.getString("fs.size"));
                     product.setSizes(sizes);
+
+                    // Product variant
+                    Set<VariantsDto> variants = new HashSet<>();
+                    VariantsDto variantsDto = new VariantsDto();
+                    variantsDto.setColorCode(rs.getString("c.code"));
+                    variantsDto.setSize(rs.getString("fs.size"));
+                    variantsDto.setStock(rs.getInt("fs.stock"));
+                    variants.add(variantsDto);
+                    product.setVariants(variants);
 
                     // images
                     Set<String> images = new HashSet<>();

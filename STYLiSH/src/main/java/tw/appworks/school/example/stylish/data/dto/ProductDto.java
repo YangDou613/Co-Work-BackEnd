@@ -1,6 +1,5 @@
 package tw.appworks.school.example.stylish.data.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,7 +49,6 @@ public class ProductDto {
     private Set<String> images;
 
     @JsonProperty("variants")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<VariantsDto> variants;
 
     @JsonProperty("colors")
