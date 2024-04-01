@@ -37,7 +37,7 @@ public class ReportServiceImpl implements ReportService {
             rp.setTotalPayment(orders.stream()
                     .filter(order -> order.getUser().getId().equals(user.getId()))
                     .map(Order::getTotal)
-                    .reduce(0f, Float::sum));
+                    .reduce(0, Integer::sum));
             ret.add(rp);
         });
         return ret;

@@ -37,13 +37,27 @@ public class Order {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    @Column(name = "subtotal")
+    private Integer subtotal;
+
+    @Column(name = "user_coupon_id")
+    private Integer userCouponId;
+
+    @Column(name = "use_coupon")
+    private Integer useCoupon;
+
+    @Column(name = "discount_amt")
+    private Integer discountAmt;
+
     @Column(name = "total")
-    private Float total;
+    private Integer total;
 
     @Override
     public String toString() {
         return "Order [id=" + id + ", number=" + number + ", time=" + time + ", status=" + status + ", details="
-                + details + ", user=" + user + ", total=" + total + "]";
+                + details + ", user=" + user + ", total=" + total + "subtotal="  + subtotal +
+                "userCouponId="  + userCouponId + "useCoupon="  + useCoupon + "discountAmt="  + discountAmt +
+                "total="  + total + "]";
     }
 
 }
