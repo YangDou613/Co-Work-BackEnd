@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ZodiacService {
@@ -70,6 +71,6 @@ public class ZodiacService {
 
     private void appendPrefix(ProductForZodiac dto) {
         dto.setMain_image(prefix + dto.getMain_image());
-//        dto.setImages(dto.getImages().stream().map(image -> prefix + image).collect(Collectors.toSet()));
+        dto.setImages(dto.getImages().stream().map(image -> prefix + image).collect(Collectors.toList()));
     }
 }

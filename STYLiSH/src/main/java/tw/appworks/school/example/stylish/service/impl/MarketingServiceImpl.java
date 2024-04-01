@@ -2,6 +2,7 @@ package tw.appworks.school.example.stylish.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,10 +28,10 @@ import java.util.Optional;
 public class MarketingServiceImpl implements MarketingService {
 
     private static final Logger logger = LoggerFactory.getLogger(MarketingServiceImpl.class);
-
     private final MarketingRepository marketingRepository;
-
     private final ProductsRepository productsRepository;
+    @Value("${image.prefix}")
+    private String prefix;
 
     public MarketingServiceImpl(MarketingRepository marketingRepository, ProductsRepository productsRepository) {
         this.marketingRepository = marketingRepository;
@@ -40,7 +41,10 @@ public class MarketingServiceImpl implements MarketingService {
     @Override
     @Cacheable(value = "getCampaigns", keyGenerator = "wiselyKeyGenerator")
     public List<CampaignDto> getCampaigns() {
-        return marketingRepository.findAll().stream().map(CampaignDto::from).toList();
+
+        List<CampaignDto> campaignDtos = marketingRepository.findAll().stream().map(CampaignDto::from).toList();
+        appendPrefix(campaignDtos);
+        return campaignDtos;
     }
 
     @Override
@@ -75,4 +79,7 @@ public class MarketingServiceImpl implements MarketingService {
         return map.values().stream().toList();
     }
 
+    private void appendPrefix(List<CampaignDto> dtos) {
+        dtos.forEach(dto -> dto.setPicture(prefix + dto.getPicture()));
+    }
 }
