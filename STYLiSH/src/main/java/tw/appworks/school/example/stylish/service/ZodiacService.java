@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tw.appworks.school.example.stylish.data.dto.ZodiacDto;
-import tw.appworks.school.example.stylish.model.product.Product;
+import tw.appworks.school.example.stylish.model.zodiac.ProductForZodiac;
 import tw.appworks.school.example.stylish.model.zodiac.Zodiac;
 import tw.appworks.school.example.stylish.model.zodiac.ZodiacEle;
 import tw.appworks.school.example.stylish.repository.zodiac.ZodiacRepository;
@@ -44,7 +44,7 @@ public class ZodiacService {
             BigInteger productId = zodiacRepository.getResult(id);
 
             // Get product
-            Product product = zodiacRepository.getProduct(productId);
+            ProductForZodiac product = zodiacRepository.getProduct(productId);
 
             // Summary
             zodiacDto.setZodiacId(zodiac.getZodiac_id());
@@ -68,8 +68,8 @@ public class ZodiacService {
         return zodiacRepository.getIdFromZodiacCrawler(currentDate);
     }
 
-    private void appendPrefix(Product dto) {
-        dto.setMainImage(prefix + dto.getMainImage());
+    private void appendPrefix(ProductForZodiac dto) {
+        dto.setMain_image(prefix + dto.getMain_image());
 //        dto.setImages(dto.getImages().stream().map(image -> prefix + image).collect(Collectors.toSet()));
     }
 }
