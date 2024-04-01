@@ -1,10 +1,13 @@
 package tw.appworks.school.example.stylish.repository.flashSale;
 
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import tw.appworks.school.example.stylish.data.dto.*;
+import tw.appworks.school.example.stylish.error.StockEmptyException;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Repository
+@CommonsLog
 public class FlashSaleDao {
     private final JdbcTemplate jdbcTemplate;
 
@@ -127,5 +131,28 @@ public class FlashSaleDao {
             // Variant not found
             return null;
         }
+    }
+
+    public void reduceStockByFlashSaleId(Long flashSaleId, int reduceAmount) throws StockEmptyException {
+        int currentStock = getStockByFlashSaleId(flashSaleId);
+        log.info("CurrentStock equals " + currentStock);
+        if (currentStock - reduceAmount < 0) {
+            throw new StockEmptyException("FlashSale product stock with ID " + flashSaleId + " has been empty, sorry");
+        }
+
+
+        String updateSql = "UPDATE flashSale SET stock = ? WHERE id = ?";
+        try {
+            jdbcTemplate.update(updateSql, currentStock - reduceAmount, flashSaleId);
+        } catch (DataAccessException e) {
+            // Handle any exceptions
+            throw new RuntimeException("Error updating stock for flash sale with ID " + flashSaleId, e);
+        }
+    }
+
+    public Integer getStockByFlashSaleId(Long flashSaleId) {
+        String selectSql = "SELECT stock FROM flashSale WHERE id = ?";
+
+        return jdbcTemplate.queryForObject(selectSql, Integer.class, flashSaleId);
     }
 }

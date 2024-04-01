@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import tw.appworks.school.example.stylish.data.dto.FlashSaleEventDto;
 import tw.appworks.school.example.stylish.data.dto.FlashSaleNoticeDto;
 import tw.appworks.school.example.stylish.data.dto.ProductDto;
+import tw.appworks.school.example.stylish.error.StockEmptyException;
 import tw.appworks.school.example.stylish.repository.flashSale.FlashSaleDao;
 import tw.appworks.school.example.stylish.service.FlashSale;
 
@@ -36,6 +37,10 @@ public class FlashSaleServiceImpl implements FlashSale {
         FlashSaleEventDto flashSaleEventDto = flashSaleDao.getFlashSaleAfterDate(currentTimeStamp);
         appendPrefix(flashSaleEventDto.getProduct());
         return flashSaleEventDto;
+    }
+
+    public void handleCheckout(Long flashSaleId) throws StockEmptyException {
+        flashSaleDao.reduceStockByFlashSaleId(flashSaleId, 1);
     }
 
     private void appendPrefix(ProductDto dto) {
