@@ -1,5 +1,6 @@
 package tw.appworks.school.example.stylish.data.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,7 @@ public class ProductDto {
     private Set<String> images;
 
     @JsonProperty("variants")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<VariantsDto> variants;
 
     @JsonProperty("colors")
@@ -56,6 +58,22 @@ public class ProductDto {
 
     @JsonProperty("sizes")
     private Set<String> sizes;
+
+    public static ProductDto from(IProductProjection mp) {
+        ProductDto ret = new ProductDto();
+        ret.setId(mp.getId());
+        ret.setCategory(mp.getCategory());
+        ret.setTitle(mp.getTitle());
+        ret.setDescription(mp.getDescription());
+        ret.setPrice(mp.getPrice());
+        ret.setTexture(mp.getTexture());
+        ret.setWash(mp.getWash());
+        ret.setPlace(mp.getPlace());
+        ret.setNote(mp.getNote());
+        ret.setStory(mp.getStory());
+        ret.updateAll(mp);
+        return ret;
+    }
 
     public void updateAll(IProductProjection mp) {
         updateColors(mp);
@@ -87,22 +105,6 @@ public class ProductDto {
         if (images == null)
             images = new HashSet<>();
         images.add(mp.getImage());
-    }
-
-    public static ProductDto from(IProductProjection mp) {
-        ProductDto ret = new ProductDto();
-        ret.setId(mp.getId());
-        ret.setCategory(mp.getCategory());
-        ret.setTitle(mp.getTitle());
-        ret.setDescription(mp.getDescription());
-        ret.setPrice(mp.getPrice());
-        ret.setTexture(mp.getTexture());
-        ret.setWash(mp.getWash());
-        ret.setPlace(mp.getPlace());
-        ret.setNote(mp.getNote());
-        ret.setStory(mp.getStory());
-        ret.updateAll(mp);
-        return ret;
     }
 
 }
